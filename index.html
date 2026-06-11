@@ -469,7 +469,7 @@
         perspective: 1100px;
         perspective-origin: 50% 20%;
       }
-      .h-canvas { width: 155vw; height: 100vw; }
+      .h-canvas { width: 155vw; height: 145vw; }
       .h-interface {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
@@ -836,8 +836,8 @@
   if (halideCanvas) {
     // Entrance animation
     const isMobile = window.innerWidth <= 640;
-    const rotX = isMobile ? 50 : 55;
-    const rotZ = isMobile ? -20 : -25;
+    const rotX = isMobile ? 58 : 55;
+    const rotZ = isMobile ? -22 : -25;
 
     halideCanvas.style.opacity = '0';
     halideCanvas.style.transform = 'rotateX(90deg) rotateZ(0deg) scale(0.8)';
