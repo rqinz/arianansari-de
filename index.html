@@ -482,6 +482,8 @@
         grid-template-columns: 1fr;
         padding-bottom: clamp(2rem, 6vw, 3rem);
       }
+      .h-viewport { perspective: 1200px; }
+      .h-canvas { width: 145vw; height: 91vw; }
       .about__stats { grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 2.5rem; padding-top: 2.5rem; }
       .skills__grid { grid-template-columns: 1fr; }
       .skill { padding: 1.75rem 1.5rem; }
@@ -490,7 +492,6 @@
       .btn { justify-content: center; }
       .footer__inner { flex-direction: column; text-align: center; gap: .625rem; }
       .footer__links { justify-content: center; flex-wrap: wrap; gap: .5rem 1.25rem; }
-      .h-canvas { width: min(520px, 94vw); height: min(325px, 59vw); }
       .contact__heading { font-size: clamp(2.75rem, 13vw, 8.5rem); }
     }
     @media (max-width: 390px) {
@@ -842,12 +843,16 @@
 
   if (halideCanvas) {
     // Entrance animation
+    const isMobile = window.innerWidth <= 640;
+    const rotX = isMobile ? 30 : 55;
+    const rotZ = isMobile ? -14 : -25;
+
     halideCanvas.style.opacity = '0';
     halideCanvas.style.transform = 'rotateX(90deg) rotateZ(0deg) scale(0.8)';
     setTimeout(() => {
       halideCanvas.style.transition = 'all 2.5s cubic-bezier(0.16, 1, 0.3, 1)';
       halideCanvas.style.opacity = '1';
-      halideCanvas.style.transform = 'rotateX(55deg) rotateZ(-25deg) scale(1)';
+      halideCanvas.style.transform = `rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(1)`;
     }, 300);
 
     // Mouse parallax — only on non-touch devices while hero is in view
@@ -857,7 +862,7 @@
         const x = (window.innerWidth  / 2 - e.pageX) / 25;
         const y = (window.innerHeight / 2 - e.pageY) / 25;
         halideCanvas.style.transition = 'transform 0.8s cubic-bezier(0.16,1,0.3,1)';
-        halideCanvas.style.transform = `rotateX(${55 + y * 0.5}deg) rotateZ(${-25 + x * 0.5}deg)`;
+        halideCanvas.style.transform = `rotateX(${rotX + y * 0.5}deg) rotateZ(${rotZ + x * 0.5}deg)`;
         halideLayers.forEach((layer, i) => {
           const moveX = x * (i + 1) * 0.2;
           const moveY = y * (i + 1) * 0.2;
