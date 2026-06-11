@@ -871,39 +871,34 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const canvas = document.getElementById('orbitCanvas');
 if (!canvas) throw new Error('no canvas');
 
-const PARTICLE_COUNT  = 1500;
+const PARTICLE_COUNT  = 1200;
 const SPHERE_RADIUS   = 9;
 const POSITION_NOISE  = 4;
-const IMAGE_COUNT     = 24;
+const IMAGE_COUNT     = 16;
 const IMAGE_SIZE      = 1.5;
 const ROTATE_Y        = 0.0005;
 
-const IMAGES = [
-  'https://plus.unsplash.com/premium_photo-1750075345490-1d9d908215c3?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758445048994-d337f97acf4c?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758637612244-08a79efb7cb7?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758621518225-9248e65dbaee?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758640920711-8ad5dbcb5214?w=600&auto=format&fit=crop&q=60',
-  'https://plus.unsplash.com/premium_photo-1728419694854-7848ad37e9e5?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1741134773975-19908121ae11?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1755609342539-a58d8d6a3e59?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758566486732-c6bcc1d080e1?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1728406970237-bc699733f027?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758506972145-fdcac3daba97?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1757435755336-f715ff8896d8?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758478648528-61a41d58944b?w=600&auto=format&fit=crop&q=60',
-  'https://plus.unsplash.com/premium_photo-1757913782298-7255e6a5213e?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758513305697-8be64c4817a5?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1741514230333-d6a6a89c4a40?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1755183312704-f29e5ad3a544?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1754769440490-2eb64d715775?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758289863455-f5b1c8c76857?w=600&auto=format&fit=crop&q=60',
-  'https://plus.unsplash.com/premium_photo-1686727103139-2824d4fa46a3?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758654307777-58463b34b4df?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1757482270431-a17f90bad2ce?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758396629698-914f06bf8b27?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758445048994-d337f97acf4c?w=600&auto=format&fit=crop&q=60',
-];
+function makePlaceholderTexture(index) {
+  const size = 512;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#0c0c0f';
+  ctx.fillRect(0, 0, size, size);
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(12, 12, size - 24, size - 24);
+  ctx.beginPath();
+  ctx.moveTo(12, 12); ctx.lineTo(size - 12, size - 12);
+  ctx.moveTo(size - 12, 12); ctx.lineTo(12, size - 12);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.font = 'bold 72px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(String(index + 1).padStart(2, '0'), size / 2, size / 2);
+  return new THREE.CanvasTexture(c);
+}
 
 const section = canvas.parentElement;
 const W = () => section.clientWidth;
@@ -958,35 +953,27 @@ group.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
 })));
 
 /* ── orbiting image planes ── */
-const loader = new THREE.TextureLoader();
-loader.crossOrigin = 'anonymous';
+for (let i = 0; i < IMAGE_COUNT; i++) {
+  const tex   = makePlaceholderTexture(i);
+  const angle = (i / IMAGE_COUNT) * Math.PI * 2;
+  const p     = new THREE.Vector3(
+    SPHERE_RADIUS * Math.cos(angle), 0,
+    SPHERE_RADIUS * Math.sin(angle)
+  );
 
-IMAGES.forEach((url, i) => {
-  loader.load(url, (tex) => {
-    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.flipY = false;
-    tex.needsUpdate = true;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
+    new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
+  );
+  mesh.position.copy(p);
 
-    const angle = (i / IMAGE_COUNT) * Math.PI * 2;
-    const p = new THREE.Vector3(
-      SPHERE_RADIUS * Math.cos(angle), 0,
-      SPHERE_RADIUS * Math.sin(angle)
-    );
+  const m = new THREE.Matrix4();
+  m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
+  mesh.rotation.setFromRotationMatrix(m);
+  mesh.rotation.z += Math.PI;
 
-    const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
-      new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
-    );
-    mesh.position.copy(p);
-
-    const m = new THREE.Matrix4();
-    m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
-    mesh.rotation.setFromRotationMatrix(m);
-    mesh.rotation.z += Math.PI;
-
-    group.add(mesh);
-  });
-});
+  group.add(mesh);
+}
 
 /* ── resize ── */
 window.addEventListener('resize', () => {
