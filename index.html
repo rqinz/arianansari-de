@@ -342,28 +342,76 @@
     .about__photo-inner svg { width:48px; opacity:.15; }
     .about__photo-label { font-family:'Space Grotesk',sans-serif; font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,0.2); }
 
-    /* ─── Skills ─────────────────────────────────────────────────── */
-    .skills__grid {
-      display:grid; grid-template-columns:repeat(3,1fr);
-      gap:1px; background: rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:20px; overflow:hidden; margin-top:3rem;
+    /* ─── Display Cards (Services) ──────────────────────────────── */
+    .dc-wrapper {
+      display: flex; gap: clamp(3rem, 8vw, 8rem);
+      align-items: flex-start; justify-content: center;
+      margin-top: 4rem; flex-wrap: wrap;
     }
-    .skill {
-      background: var(--glass-bg); padding:2.25rem 2.5rem;
-      transition: background .25s;
-      backdrop-filter: blur(12px);
+    .dc-group {
+      display: grid; grid-template-areas: 'stack';
+      place-items: center;
     }
-    .skill:hover { background: rgba(255,255,255,0.07); }
-    .skill__icon {
-      width:40px; height:40px; border-radius:10px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      display:flex; align-items:center; justify-content:center;
-      color: var(--white); margin-bottom:1.25rem;
+    .dc-card {
+      grid-area: stack;
+      position: relative;
+      height: 9rem; width: 19rem;
+      transform: skewY(-8deg);
+      display: flex; flex-direction: column; justify-content: space-between;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      padding: .875rem 1.125rem;
+      transition: transform 700ms cubic-bezier(.16,1,.3,1), filter 700ms, border-color 300ms;
+      cursor: default; user-select: none; overflow: visible;
     }
-    .skill__name { font-family:var(--f-head); font-size:1.0625rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.4rem; color: var(--white); }
-    .skill__desc { font-size:.875rem; color: var(--muted); line-height:1.6; }
+    /* Right gradient — creates the layered-peek illusion */
+    .dc-card::after {
+      content: '';
+      position: absolute; right: -1px; top: -5%;
+      height: 110%; width: 17rem;
+      background: linear-gradient(to left, var(--bg) 30%, transparent);
+      pointer-events: none; border-radius: 0 14px 14px 0;
+    }
+    /* Dim overlay on back cards */
+    .dc-b1::before, .dc-b2::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: inherit;
+      background: rgba(6,6,8,0.55);
+      transition: opacity 700ms; pointer-events: none; z-index: 2;
+    }
+    .dc-b1, .dc-b2 { filter: grayscale(1); }
+
+    /* Stacking positions */
+    .dc-b1 { transform: skewY(-8deg) translate(3.25rem, 1.875rem); }
+    .dc-b2 { transform: skewY(-8deg) translate(6.5rem, 3.75rem); }
+
+    /* Hover */
+    .dc-f:hover  { transform: skewY(-8deg) translateY(-2.5rem); border-color: rgba(255,255,255,0.2); }
+    .dc-b1:hover { transform: skewY(-8deg) translate(3.25rem, -.25rem); border-color: rgba(255,255,255,0.14); filter: grayscale(0); }
+    .dc-b1:hover::before { opacity: 0; }
+    .dc-b2:hover { transform: skewY(-8deg) translate(6.5rem, 6rem); border-color: rgba(255,255,255,0.1); }
+
+    /* Card content */
+    .dc-row { display: flex; align-items: center; gap: .5rem; }
+    .dc-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+    }
+    .dc-title {
+      font-family: var(--f-head); font-size: .9375rem; font-weight: 700;
+      letter-spacing: -.02em; color: var(--white);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .dc-desc {
+      font-size: .8125rem; color: rgba(255,255,255,0.75);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      position: relative; z-index: 1;
+    }
+    .dc-meta { font-size: .6875rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 
     /* ─── Contact ────────────────────────────────────────────────── */
     .contact { text-align:center; position:relative; overflow:hidden; }
@@ -508,7 +556,7 @@
       .card--a, .card--b, .card--c { grid-column: span 12; }
       .about__grid { grid-template-columns: 1fr; gap: 3rem; }
       .about__stats { grid-template-columns: repeat(4, 1fr); }
-      .skills__grid { grid-template-columns: repeat(2, 1fr); }
+      .dc-wrapper { gap: 2rem; }
     }
     @media (max-width: 768px) {
       :root { --nav-h: 56px; }
@@ -533,8 +581,13 @@
       }
       .h-title { align-self: start; padding-top: .375rem; }
       .about__stats { grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 2.5rem; padding-top: 2.5rem; }
-      .skills__grid { grid-template-columns: 1fr; }
-      .skill { padding: 1.75rem 1.5rem; }
+      .dc-wrapper { gap: 1.5rem; }
+      .dc-card { width: 15rem; }
+      .dc-card::after { width: 13rem; }
+      .dc-b1 { transform: skewY(-8deg) translate(2.5rem, 1.5rem); }
+      .dc-b2 { transform: skewY(-8deg) translate(5rem, 3rem); }
+      .dc-b1:hover { transform: skewY(-8deg) translate(2.5rem, -.25rem); }
+      .dc-b2:hover { transform: skewY(-8deg) translate(5rem, 5rem); }
       .card__body { padding: 1.25rem 1.25rem 1.5rem; }
       .contact__actions { flex-direction: column; align-items: stretch; }
       .btn { justify-content: center; }
@@ -666,54 +719,68 @@
 <section class="wrap" id="skills" aria-labelledby="skills-lbl">
   <div class="container">
     <p class="eyebrow reveal" id="skills-lbl">Services</p>
-    <div class="skills__grid reveal" data-d="1">
+    <div class="dc-wrapper reveal" data-d="1">
 
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      <!-- Group 1: Digital -->
+      <div class="dc-group">
+        <!-- back -->
+        <div class="dc-card dc-b2">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+            <h3 class="dc-title">Visitenkarten &amp; Print</h3>
+          </div>
+          <p class="dc-desc">Visitenkarten, Flyer &amp; Printmedien</p>
+          <p class="dc-meta">Print</p>
         </div>
-        <h3 class="skill__name">Webdesign &amp; Development</h3>
-        <p class="skill__desc">Professionelle Unternehmenswebseiten — modern, schnell und auf Conversions ausgelegt.</p>
+        <!-- mid -->
+        <div class="dc-card dc-b1">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+            <h3 class="dc-title">Visual Effects</h3>
+          </div>
+          <p class="dc-desc">Cinematischer Motion-Content &amp; VFX</p>
+          <p class="dc-meta">Motion</p>
+        </div>
+        <!-- front -->
+        <div class="dc-card dc-f">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+            <h3 class="dc-title">Webdesign &amp; Dev</h3>
+          </div>
+          <p class="dc-desc">Professionelle Unternehmenswebseiten</p>
+          <p class="dc-meta">Digital</p>
+        </div>
       </div>
 
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      <!-- Group 2: Physisch -->
+      <div class="dc-group">
+        <!-- back -->
+        <div class="dc-card dc-b2">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg></span>
+            <h3 class="dc-title">Brand Identity</h3>
+          </div>
+          <p class="dc-desc">Logo, Farbwelt &amp; Typografie</p>
+          <p class="dc-meta">Branding</p>
         </div>
-        <h3 class="skill__name">Visual Effects</h3>
-        <p class="skill__desc">Cinematische VFX und Motion-Content für Werbung, Social Media und Präsentationen.</p>
-      </div>
-
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <!-- mid -->
+        <div class="dc-card dc-b1">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></span>
+            <h3 class="dc-title">Firmenkleidung</h3>
+          </div>
+          <p class="dc-desc">Workwear, Druck &amp; Stickerei</p>
+          <p class="dc-meta">Print</p>
         </div>
-        <h3 class="skill__name">Visitenkarten &amp; Print</h3>
-        <p class="skill__desc">Hochwertige Drucksachen — Visitenkarten, Flyer und Printmedien im Premium-Look.</p>
-      </div>
-
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><path d="M13 16v-2a2 2 0 0 1 4 0v2"/></svg>
+        <!-- front -->
+        <div class="dc-card dc-f">
+          <div class="dc-row">
+            <span class="dc-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><path d="M13 16v-2a2 2 0 0 1 4 0v2"/></svg></span>
+            <h3 class="dc-title">Auto &amp; Glasfassaden</h3>
+          </div>
+          <p class="dc-desc">Folierungen für Fahrzeuge &amp; Fassaden</p>
+          <p class="dc-meta">Physisch</p>
         </div>
-        <h3 class="skill__name">Auto &amp; Glasfassaden-Folierung</h3>
-        <p class="skill__desc">Professionelle Folierungen für Fahrzeugflotten und Schaufensterflächen — auffällig und langlebig.</p>
-      </div>
-
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
-        </div>
-        <h3 class="skill__name">Firmenkleidung</h3>
-        <p class="skill__desc">Maßgeschneiderte Workwear und Merch — Druck, Stickerei, individuelles Design für dein Team.</p>
-      </div>
-
-      <div class="skill">
-        <div class="skill__icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
-        </div>
-        <h3 class="skill__name">Brand Identity</h3>
-        <p class="skill__desc">Logo, Farbwelt, Typografie — eine Markenidentität die an jedem Touchpoint funktioniert.</p>
       </div>
 
     </div>
