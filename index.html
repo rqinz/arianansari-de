@@ -6,6 +6,15 @@
   <meta name="description" content="Arian Ansari — Premium Creative für Unternehmen & Startups. Websites, Folierungen, VFX, Firmenkleidung, Visitenkarten. Cineastisch. Hochwertig.">
   <title>Arian Ansari</title>
 
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
+    }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -404,6 +413,31 @@
       50%      { text-shadow: 0 0 60px rgba(255,255,255,.26), 0 0 140px rgba(255,255,255,.12); }
     }
 
+    /* ─── Orbit Gallery ─────────────────────────────────────────── */
+    .orbit-section {
+      position: relative; height: 100vh;
+      background: var(--bg); overflow: hidden;
+    }
+    .orbit-canvas {
+      display: block; position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    .orbit-eyebrow {
+      position: absolute; top: var(--sy); left: var(--pad-x);
+      z-index: 10; pointer-events: none;
+      font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--dim);
+      display: flex; align-items: center; gap: .875rem;
+    }
+    .orbit-eyebrow::after { content:''; flex: 0 0 48px; height: 1px; background: rgba(255,255,255,0.07); }
+    .orbit-hint {
+      position: absolute; bottom: clamp(2rem,4vw,3rem); left: 50%; transform: translateX(-50%);
+      font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dim);
+      z-index: 10; pointer-events: none;
+      opacity: 0; animation: up .6s ease forwards 1s;
+    }
+    @media (max-width: 768px) { .orbit-section { display: none; } }
+
     /* ─── Mobile Nav ─────────────────────────────────────────────── */
     .nav__burger {
       display: none;
@@ -709,6 +743,13 @@
   </div>
 </section>
 
+<!-- ── Orbit Gallery ─────────────────────────────────────────────── -->
+<section class="orbit-section" id="gallery" aria-label="3D Galerie">
+  <canvas class="orbit-canvas" id="orbitCanvas"></canvas>
+  <p class="orbit-eyebrow">Galerie</p>
+  <p class="orbit-hint">Ziehen zum Drehen &nbsp;·&nbsp; Scrollen zum Zoomen</p>
+</section>
+
 <!-- ── About ─────────────────────────────────────────────────────── -->
 <section class="wrap about" id="about" aria-labelledby="about-lbl">
   <div class="container">
@@ -934,6 +975,139 @@
       card.style.transform = '';
     });
   });
+</script>
+
+<script type="module">
+/* ── Orbit Gallery (Three.js) ───────────────────────────────── */
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('orbitCanvas');
+if (!canvas) throw new Error('no canvas');
+
+const PARTICLE_COUNT  = 1200;
+const SPHERE_RADIUS   = 9;
+const POSITION_NOISE  = 4;
+const IMAGE_COUNT     = 16;
+const IMAGE_SIZE      = 1.5;
+const ROTATE_Y        = 0.0005;
+
+const IMAGES = [
+  'https://plus.unsplash.com/premium_photo-1750075345490-1d9d908215c3?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758445048994-d337f97acf4c?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758637612244-08a79efb7cb7?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758621518225-9248e65dbaee?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758640920711-8ad5dbcb5214?w=600&auto=format&fit=crop&q=60',
+  'https://plus.unsplash.com/premium_photo-1728419694854-7848ad37e9e5?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1741134773975-19908121ae11?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1755609342539-a58d8d6a3e59?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758566486732-c6bcc1d080e1?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1728406970237-bc699733f027?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758506972145-fdcac3daba97?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1757435755336-f715ff8896d8?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758478648528-61a41d58944b?w=600&auto=format&fit=crop&q=60',
+  'https://plus.unsplash.com/premium_photo-1757913782298-7255e6a5213e?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1758513305697-8be64c4817a5?w=600&auto=format&fit=crop&q=60',
+  'https://images.unsplash.com/photo-1741514230333-d6a6a89c4a40?w=600&auto=format&fit=crop&q=60',
+];
+
+const section = canvas.parentElement;
+const W = () => section.clientWidth;
+const H = () => section.clientHeight;
+
+/* renderer */
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(W(), H());
+
+/* scene / camera */
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, W() / H(), 0.1, 1000);
+camera.position.set(-10, 1.5, 10);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const pt = new THREE.PointLight(0xffffff, 1);
+pt.position.set(10, 10, 10);
+scene.add(pt);
+
+/* controls */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping  = true;
+controls.dampingFactor  = 0.05;
+controls.enablePan      = false;
+
+/* group */
+const group = new THREE.Group();
+scene.add(group);
+
+/* ── particles (BufferGeometry Points — performant) ── */
+const pos   = new Float32Array(PARTICLE_COUNT * 3);
+const col   = new Float32Array(PARTICLE_COUNT * 3);
+const color = new THREE.Color();
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  const phi   = Math.acos(-1 + (2 * i) / PARTICLE_COUNT);
+  const theta = Math.sqrt(PARTICLE_COUNT * Math.PI) * phi;
+  const r     = SPHERE_RADIUS + (Math.random() - 0.5) * POSITION_NOISE;
+  pos[i*3]   = r * Math.cos(theta) * Math.sin(phi);
+  pos[i*3+1] = r * Math.cos(phi);
+  pos[i*3+2] = r * Math.sin(theta) * Math.sin(phi);
+  color.setHSL(Math.random() * 0.1 + 0.05, 0.8, 0.6 + Math.random() * 0.3);
+  col[i*3] = color.r; col[i*3+1] = color.g; col[i*3+2] = color.b;
+}
+
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+pGeo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+group.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+  size: 0.07, vertexColors: true, transparent: true, opacity: 0.85, sizeAttenuation: true,
+})));
+
+/* ── orbiting image planes ── */
+const loader = new THREE.TextureLoader();
+loader.crossOrigin = 'anonymous';
+
+IMAGES.slice(0, IMAGE_COUNT).forEach((url, i) => {
+  loader.load(url, (tex) => {
+    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.needsUpdate = true;
+
+    const angle = (i / IMAGE_COUNT) * Math.PI * 2;
+    const p     = new THREE.Vector3(
+      SPHERE_RADIUS * Math.cos(angle), 0,
+      SPHERE_RADIUS * Math.sin(angle)
+    );
+
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
+      new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
+    );
+    mesh.position.copy(p);
+
+    /* face outward */
+    const m = new THREE.Matrix4();
+    m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
+    mesh.rotation.setFromRotationMatrix(m);
+    mesh.rotation.z += Math.PI;
+
+    group.add(mesh);
+  });
+});
+
+/* ── resize ── */
+window.addEventListener('resize', () => {
+  camera.aspect = W() / H();
+  camera.updateProjectionMatrix();
+  renderer.setSize(W(), H());
+}, { passive: true });
+
+/* ── render loop ── */
+(function tick() {
+  requestAnimationFrame(tick);
+  group.rotation.y += ROTATE_Y;
+  controls.update();
+  renderer.render(scene, camera);
+})();
 </script>
 </body>
 </html>
