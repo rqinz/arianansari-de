@@ -328,6 +328,19 @@
     .stat__l { display:block; font-size:.8125rem; color: var(--muted); margin-top:.375rem; }
     .about__text { font-size:1.0625rem; color: rgba(255,255,255,0.5); line-height:1.78; }
     .about__text p+p { margin-top:1.25rem; }
+    .about__right { display:flex; flex-direction:column; gap:2rem; }
+    .about__right p+p { margin-top:1.25rem; }
+    .about__photo { width:100%; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); }
+    .about__photo-inner { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; position:relative; }
+    .about__photo-inner::before,
+    .about__photo-inner::after {
+      content:''; position:absolute; width:1px; background:rgba(255,255,255,0.06);
+      top:0; bottom:0;
+    }
+    .about__photo-inner::before { left:50%; transform:translateX(-50%) rotate(45deg) scaleY(1.4); }
+    .about__photo-inner::after  { left:50%; transform:translateX(-50%) rotate(-45deg) scaleY(1.4); }
+    .about__photo-inner svg { width:48px; opacity:.15; }
+    .about__photo-label { font-family:'Space Grotesk',sans-serif; font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,0.2); }
 
     /* ─── Skills ─────────────────────────────────────────────────── */
     .skills__grid {
@@ -545,7 +558,6 @@
   <div class="nav__inner">
     <a href="#" class="nav__logo" aria-label="Arian Ansari – Home">AA.</a>
     <ul class="nav__links" role="list">
-      <li><a href="#work">Projekte</a></li>
       <li><a href="#skills">Services</a></li>
       <li><a href="#about">Über mich</a></li>
       <li><a href="#contact" class="nav__cta">Projekt anfragen</a></li>
@@ -557,7 +569,6 @@
 </nav>
 <div class="nav__mobile" id="navMobile" aria-hidden="true">
   <ul role="list">
-    <li><a href="#work">Projekte</a></li>
     <li><a href="#skills">Services</a></li>
     <li><a href="#about">Über mich</a></li>
     <li><a href="#contact">Projekt anfragen</a></li>
@@ -611,137 +622,6 @@
   </div>
 </div>
 
-<!-- ── Work ──────────────────────────────────────────────────────── -->
-<section class="wrap" id="work" aria-labelledby="work-lbl">
-  <div class="container">
-    <p class="eyebrow reveal" id="work-lbl">Ausgewählte Projekte</p>
-    <div class="work-grid">
-
-      <article class="card card--a reveal" tabindex="0" role="button" aria-label="Brand Identity System öffnen">
-        <div class="card__thumb">
-          <svg viewBox="0 0 700 394" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="700" height="394" fill="#0f0f12"/>
-            <circle cx="200" cy="197" r="130" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <circle cx="200" cy="197" r="85"  fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-            <circle cx="200" cy="197" r="40"  fill="rgba(255,255,255,0.08)"/>
-            <line x1="390" y1="70"  x2="660" y2="70"  stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="390" y1="102" x2="560" y2="102" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="390" y1="134" x2="620" y2="134" stroke="rgba(255,255,255,0.09)" stroke-width="1.5" stroke-linecap="round"/>
-            <rect x="390" y="200" width="240" height="3" fill="rgba(255,255,255,0.07)" rx="2"/>
-            <rect x="390" y="218" width="160" height="3" fill="rgba(255,255,255,0.05)" rx="2"/>
-            <rect x="390" y="236" width="200" height="3" fill="rgba(255,255,255,0.06)" rx="2"/>
-            <rect x="390" y="315" width="88" height="32" rx="16" fill="rgba(255,255,255,0.9)"/>
-          </svg>
-          <span class="card__badge">2024</span>
-        </div>
-        <div class="card__body">
-          <h3 class="card__title">Brand Identity System</h3>
-          <p class="card__desc">Komplette visuelle Identität für ein Berliner Tech-Startup — Logo-Konstruktion bis fertiger Styleguide.</p>
-          <div class="card__footer">
-            <div class="card__tags">
-              <span class="tag">Figma</span><span class="tag">Branding</span><span class="tag">Motion</span>
-            </div>
-            <div class="card__arrow" aria-hidden="true">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card card--b reveal" data-d="1" tabindex="0" role="button" aria-label="Habit iOS App öffnen">
-        <div class="card__thumb">
-          <svg viewBox="0 0 420 315" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="420" height="315" fill="#0f0f12"/>
-            <rect x="130" y="28" width="160" height="259" rx="24" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-            <rect x="146" y="54" width="128" height="172" rx="8" fill="rgba(255,255,255,0.04)"/>
-            <rect x="156" y="70" width="72" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
-            <rect x="156" y="84" width="50" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
-            <rect x="156" y="102" width="108" height="40" rx="7" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="156" y="150" width="50" height="40" rx="7" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="214" y="150" width="50" height="40" rx="7" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="156" y="200" width="108" height="11" rx="5.5" fill="rgba(255,255,255,0.85)"/>
-            <circle cx="210" cy="267" r="8" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-          </svg>
-          <span class="card__badge">2024</span>
-        </div>
-        <div class="card__body">
-          <h3 class="card__title">Habit iOS App</h3>
-          <p class="card__desc">Minimalistisches Habit-Tracking für iOS — klare Struktur, null Ablenkung.</p>
-          <div class="card__footer">
-            <div class="card__tags"><span class="tag">Swift</span><span class="tag">iOS HIG</span></div>
-            <div class="card__arrow" aria-hidden="true">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card card--c reveal" tabindex="0" role="button" aria-label="E-Commerce Plattform öffnen">
-        <div class="card__thumb">
-          <svg viewBox="0 0 560 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="560" height="373" fill="#0f0f12"/>
-            <rect x="40" y="40" width="228" height="178" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-            <rect x="40" y="233" width="140" height="8" rx="4" fill="rgba(255,255,255,0.12)"/>
-            <rect x="40" y="250" width="90" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
-            <rect x="40" y="272" width="72" height="26" rx="13" fill="rgba(255,255,255,0.85)"/>
-            <rect x="292" y="40" width="228" height="178" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-            <rect x="292" y="233" width="110" height="8" rx="4" fill="rgba(255,255,255,0.12)"/>
-            <rect x="292" y="250" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
-            <rect x="292" y="272" width="72" height="26" rx="13" fill="rgba(255,255,255,0.85)"/>
-          </svg>
-          <span class="card__badge">2023</span>
-        </div>
-        <div class="card__body">
-          <h3 class="card__title">E-Commerce Plattform</h3>
-          <p class="card__desc">Next.js-Shop mit 40% besserer Conversion durch klareres Checkout-Design.</p>
-          <div class="card__footer">
-            <div class="card__tags"><span class="tag">Next.js</span><span class="tag">Tailwind</span></div>
-            <div class="card__arrow" aria-hidden="true">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card card--c reveal" data-d="1" tabindex="0" role="button" aria-label="SaaS Dashboard öffnen">
-        <div class="card__thumb">
-          <svg viewBox="0 0 560 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="560" height="373" fill="#0f0f12"/>
-            <rect x="0" y="0" width="108" height="373" fill="rgba(255,255,255,0.03)" stroke-right="rgba(255,255,255,0.06)"/>
-            <line x1="108" y1="0" x2="108" y2="373" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <circle cx="54" cy="44" r="16" fill="rgba(255,255,255,0.08)"/>
-            <rect x="20" y="80" width="68" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
-            <rect x="20" y="104" width="68" height="5" rx="2.5" fill="rgba(255,255,255,0.05)"/>
-            <rect x="20" y="128" width="68" height="5" rx="2.5" fill="rgba(255,255,255,0.05)"/>
-            <rect x="128" y="28" width="176" height="76" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="316" y="28" width="80" height="76" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="408" y="28" width="128" height="76" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="128" y="120" width="408" height="230" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <rect x="152" y="258" width="28" height="56" rx="4" fill="rgba(255,255,255,0.3)"/>
-            <rect x="196" y="224" width="28" height="90" rx="4" fill="rgba(255,255,255,0.5)"/>
-            <rect x="240" y="240" width="28" height="74" rx="4" fill="rgba(255,255,255,0.35)"/>
-            <rect x="284" y="200" width="28" height="114" rx="4" fill="rgba(255,255,255,0.7)"/>
-            <rect x="328" y="218" width="28" height="96" rx="4" fill="rgba(255,255,255,0.45)"/>
-            <rect x="372" y="248" width="28" height="66" rx="4" fill="rgba(255,255,255,0.3)"/>
-            <rect x="416" y="212" width="28" height="102" rx="4" fill="rgba(255,255,255,0.55)"/>
-          </svg>
-          <span class="card__badge">2023</span>
-        </div>
-        <div class="card__body">
-          <h3 class="card__title">SaaS Analytics Dashboard</h3>
-          <p class="card__desc">Komplexe Datendarstellung — strukturiert, lesbar, auf Entscheidungen ausgelegt.</p>
-          <div class="card__footer">
-            <div class="card__tags"><span class="tag">React</span><span class="tag">D3.js</span><span class="tag">TypeScript</span></div>
-            <div class="card__arrow" aria-hidden="true">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </div>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
 
 <!-- ── Orbit Gallery ─────────────────────────────────────────────── -->
 <section class="orbit-section" id="gallery" aria-label="3D Galerie">
@@ -768,7 +648,13 @@
           <div><span class="stat__n">360°</span><span class="stat__l">Brand Experience</span></div>
         </div>
       </div>
-      <div class="about__text reveal" data-d="2">
+      <div class="about__right reveal" data-d="2">
+        <div class="about__photo" aria-label="Foto von Arian Ansari">
+          <div class="about__photo-inner">
+            <svg viewBox="0 0 1 1" aria-hidden="true"></svg>
+            <span class="about__photo-label">Foto folgt</span>
+          </div>
+        </div>
         <p>Ich bin Arian Ansari — ich realisiere vollständige Markenauftritte für Unternehmen und Startups. Von der Website über Visitenkarten bis hin zu Auto-Folierungen, Glasfassaden, Firmenkleidung und Visual Effects.</p>
         <p>Alles aus einer Hand. Alles im cinematischen, hochqualitativen Stil — weil eine starke Marke an jedem Touchpoint überzeugen muss.</p>
       </div>
@@ -992,24 +878,27 @@ const IMAGE_COUNT     = 16;
 const IMAGE_SIZE      = 1.5;
 const ROTATE_Y        = 0.0005;
 
-const IMAGES = [
-  'https://plus.unsplash.com/premium_photo-1750075345490-1d9d908215c3?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758445048994-d337f97acf4c?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758637612244-08a79efb7cb7?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758621518225-9248e65dbaee?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758640920711-8ad5dbcb5214?w=600&auto=format&fit=crop&q=60',
-  'https://plus.unsplash.com/premium_photo-1728419694854-7848ad37e9e5?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1741134773975-19908121ae11?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1755609342539-a58d8d6a3e59?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758566486732-c6bcc1d080e1?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1728406970237-bc699733f027?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758506972145-fdcac3daba97?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1757435755336-f715ff8896d8?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758478648528-61a41d58944b?w=600&auto=format&fit=crop&q=60',
-  'https://plus.unsplash.com/premium_photo-1757913782298-7255e6a5213e?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1758513305697-8be64c4817a5?w=600&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1741514230333-d6a6a89c4a40?w=600&auto=format&fit=crop&q=60',
-];
+function makePlaceholderTexture(index) {
+  const size = 512;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#0c0c0f';
+  ctx.fillRect(0, 0, size, size);
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(12, 12, size - 24, size - 24);
+  ctx.beginPath();
+  ctx.moveTo(12, 12); ctx.lineTo(size - 12, size - 12);
+  ctx.moveTo(size - 12, 12); ctx.lineTo(12, size - 12);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.font = 'bold 72px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(String(index + 1).padStart(2, '0'), size / 2, size / 2);
+  return new THREE.CanvasTexture(c);
+}
 
 const section = canvas.parentElement;
 const W = () => section.clientWidth;
@@ -1064,35 +953,27 @@ group.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
 })));
 
 /* ── orbiting image planes ── */
-const loader = new THREE.TextureLoader();
-loader.crossOrigin = 'anonymous';
+for (let i = 0; i < IMAGE_COUNT; i++) {
+  const tex   = makePlaceholderTexture(i);
+  const angle = (i / IMAGE_COUNT) * Math.PI * 2;
+  const p     = new THREE.Vector3(
+    SPHERE_RADIUS * Math.cos(angle), 0,
+    SPHERE_RADIUS * Math.sin(angle)
+  );
 
-IMAGES.slice(0, IMAGE_COUNT).forEach((url, i) => {
-  loader.load(url, (tex) => {
-    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.needsUpdate = true;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
+    new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
+  );
+  mesh.position.copy(p);
 
-    const angle = (i / IMAGE_COUNT) * Math.PI * 2;
-    const p     = new THREE.Vector3(
-      SPHERE_RADIUS * Math.cos(angle), 0,
-      SPHERE_RADIUS * Math.sin(angle)
-    );
+  const m = new THREE.Matrix4();
+  m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
+  mesh.rotation.setFromRotationMatrix(m);
+  mesh.rotation.z += Math.PI;
 
-    const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
-      new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
-    );
-    mesh.position.copy(p);
-
-    /* face outward */
-    const m = new THREE.Matrix4();
-    m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
-    mesh.rotation.setFromRotationMatrix(m);
-    mesh.rotation.z += Math.PI;
-
-    group.add(mesh);
-  });
-});
+  group.add(mesh);
+}
 
 /* ── resize ── */
 window.addEventListener('resize', () => {
