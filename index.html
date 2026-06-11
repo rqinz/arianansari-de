@@ -198,20 +198,6 @@
     }
     .h-cta:hover { background: #ff3c00; color: #fff; transform: translateY(-5px); }
 
-    /* Scroll hint */
-    .h-scroll {
-      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-      width: 1px; height: 60px; z-index: 11;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.35), transparent);
-      animation: flow 2.4s infinite ease-in-out;
-    }
-    @keyframes flow {
-      0%,100% { transform: translateX(-50%) scaleY(0); transform-origin: top; opacity: 0; }
-      20%      { opacity: 1; }
-      50%      { transform: translateX(-50%) scaleY(1); transform-origin: top; }
-      51%      { transform: translateX(-50%) scaleY(1); transform-origin: bottom; }
-      99%      { transform: translateX(-50%) scaleY(0); transform-origin: bottom; opacity: 0; }
-    }
 
     /* ─── Ticker ─────────────────────────────────────────────────── */
     .ticker {
@@ -478,12 +464,19 @@
       .h-canvas { width: min(680px, 92vw); height: min(425px, 57vw); }
     }
     @media (max-width: 640px) {
+      .h-viewport {
+        align-items: flex-end;
+        perspective: 1100px;
+        perspective-origin: 50% 20%;
+      }
+      .h-canvas { width: 155vw; height: 100vw; }
       .h-interface {
         grid-template-columns: 1fr;
-        padding-bottom: clamp(2rem, 6vw, 3rem);
+        grid-template-rows: auto auto;
+        align-content: start;
+        padding-bottom: 0;
       }
-      .h-viewport { perspective: 1200px; }
-      .h-canvas { width: 145vw; height: 91vw; }
+      .h-title { align-self: start; padding-top: .375rem; }
       .about__stats { grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 2.5rem; padding-top: 2.5rem; }
       .skills__grid { grid-template-columns: 1fr; }
       .skill { padding: 1.75rem 1.5rem; }
@@ -549,7 +542,6 @@
     <h1 class="h-title">DEINE<br>MARKE.</h1>
   </div>
 
-  <div class="h-scroll" aria-hidden="true"></div>
 </section>
 
 <!-- ── Ticker ────────────────────────────────────────────────────── -->
@@ -844,8 +836,8 @@
   if (halideCanvas) {
     // Entrance animation
     const isMobile = window.innerWidth <= 640;
-    const rotX = isMobile ? 30 : 55;
-    const rotZ = isMobile ? -14 : -25;
+    const rotX = isMobile ? 50 : 55;
+    const rotZ = isMobile ? -20 : -25;
 
     halideCanvas.style.opacity = '0';
     halideCanvas.style.transform = 'rotateX(90deg) rotateZ(0deg) scale(0.8)';
