@@ -135,24 +135,6 @@
     }
 
 
-    /* ─── Ticker ─────────────────────────────────────────────────── */
-    .ticker {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      overflow: hidden; padding: 1rem 0;
-      background: var(--bg-2);
-    }
-    .ticker__track {
-      display: flex; gap: 3rem; width: max-content;
-      animation: ticker 28s linear infinite;
-    }
-    .ticker__track:hover { animation-play-state: paused; }
-    .ticker span {
-      font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--dim); white-space: nowrap;
-    }
-    .ticker span.dot { color: rgba(255,255,255,0.15); }
-    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* ─── Shared ─────────────────────────────────────────────────── */
     .wrap { padding: var(--sy) var(--pad-x); }
@@ -664,29 +646,6 @@
 </section>
 
 <!-- ── Ticker ────────────────────────────────────────────────────── -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track">
-    <span>Webdesign &amp; Development</span><span class="dot">·</span>
-    <span>Visitenkarten &amp; Print</span><span class="dot">·</span>
-    <span>Auto-Folierung</span><span class="dot">·</span>
-    <span>Glasfassaden-Folierung</span><span class="dot">·</span>
-    <span>Firmenkleidung</span><span class="dot">·</span>
-    <span>Visual Effects</span><span class="dot">·</span>
-    <span>Brand Identity</span><span class="dot">·</span>
-    <span>Cinematischer Stil</span><span class="dot">·</span>
-    <span>Für Unternehmen &amp; Startups</span><span class="dot">·</span>
-    <!-- duplicate for infinite loop -->
-    <span>Webdesign &amp; Development</span><span class="dot">·</span>
-    <span>Visitenkarten &amp; Print</span><span class="dot">·</span>
-    <span>Auto-Folierung</span><span class="dot">·</span>
-    <span>Glasfassaden-Folierung</span><span class="dot">·</span>
-    <span>Firmenkleidung</span><span class="dot">·</span>
-    <span>Visual Effects</span><span class="dot">·</span>
-    <span>Brand Identity</span><span class="dot">·</span>
-    <span>Cinematischer Stil</span><span class="dot">·</span>
-    <span>Für Unternehmen &amp; Startups</span><span class="dot">·</span>
-  </div>
-</div>
 
 
 <!-- ── Orbit Gallery ─────────────────────────────────────────────── -->
@@ -1025,7 +984,7 @@
     setSize();
 
     const WORDS      = ['ARIAN ANSARI', 'DEINE MARKE', 'WEBDESIGN', 'VFX', 'BRANDING', 'BERLIN', 'FOLIERUNG', 'FIRMENKLEIDUNG'];
-    const PIXEL_STEP = 5;
+    const PIXEL_STEP = 10;
     let particles    = [];
     let frameCount   = 0;
     let wordIndex    = 0;
@@ -1150,7 +1109,7 @@
         }
       }
       frameCount++;
-      if (frameCount % 220 === 0) {
+      if (frameCount % 400 === 0) {
         wordIndex = (wordIndex + 1) % WORDS.length;
         showWord(WORDS[wordIndex]);
       }
@@ -1244,7 +1203,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const canvas = document.getElementById('orbitCanvas');
 if (!canvas) throw new Error('no canvas');
 
-const PARTICLE_COUNT  = 1200;
+const PARTICLE_COUNT  = 600;
 const SPHERE_RADIUS   = 9;
 const POSITION_NOISE  = 4;
 const IMAGE_COUNT     = 16;
@@ -1328,7 +1287,7 @@ const pGeo = new THREE.BufferGeometry();
 pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 pGeo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
 group.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-  size: 0.07, vertexColors: true, transparent: true, opacity: 0.85, sizeAttenuation: true,
+  size: 0.09, vertexColors: true, transparent: true, opacity: 0.75, sizeAttenuation: true,
 })));
 
 /* ── orbiting image planes ── */
