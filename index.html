@@ -983,8 +983,8 @@
     }
     setSize();
 
-    const WORDS      = ['ARIAN ANSARI', 'DEINE MARKE', 'WEBDESIGN', 'VFX', 'BRANDING', 'BERLIN', 'FOLIERUNG', 'FIRMENKLEIDUNG'];
-    const PIXEL_STEP = 10;
+    const WORDS      = ['ARIAN ANSARI', 'DEINE MARKE', 'WEBDESIGN', 'VFX', 'BRANDING', 'FOLIERUNG', 'FIRMENKLEIDUNG'];
+    const PIXEL_STEP = 18;
     let particles    = [];
     let frameCount   = 0;
     let wordIndex    = 0;
@@ -1109,7 +1109,7 @@
         }
       }
       frameCount++;
-      if (frameCount % 400 === 0) {
+      if (frameCount % 580 === 0) {
         wordIndex = (wordIndex + 1) % WORDS.length;
         showWord(WORDS[wordIndex]);
       }
