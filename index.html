@@ -108,7 +108,7 @@
       position: relative;
       min-height: 100dvh; background: #000; overflow: hidden;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: space-between;
+      align-items: center; justify-content: flex-end;
       padding: calc(var(--nav-h) + 1.5rem) var(--pad-x) clamp(2.5rem,5vw,4rem);
     }
     /* canvas fills the whole hero */
@@ -693,7 +693,7 @@
         <h2 class="about__heading reveal">
           Digital.<br>
           Physisch.<br>
-          <em>Cineastisch.</em>
+          <em>Cinematisch.</em>
         </h2>
         <div class="about__stats reveal" data-d="1">
           <div><span class="stat__n" data-count="5">0</span><span class="stat__l">Jahre Erfahrung</span></div>
@@ -705,7 +705,7 @@
 
       <!-- Col 2: Photo -->
       <div class="about__photo reveal" data-d="1">
-        <img src="photo.jpg" alt="Arian Ansari" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
+        <img src="photo.jpg" alt="Arian Ansari" loading="lazy" style="width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:#000;">
       </div>
 
       <!-- Col 3: Text -->
@@ -1075,21 +1075,37 @@
     }
 
     function showWord(word, allowSpawn = false) {
+      const isPortrait = canvas.height > canvas.width * 1.2;
       const off = document.createElement('canvas');
       off.width = canvas.width; off.height = canvas.height;
       const oc = off.getContext('2d');
 
-      /* auto-fit font size to 88% of canvas width */
-      let fontSize = Math.floor(canvas.height * 0.28);
+      /* On portrait mobile, split multi-word strings into two lines so each
+         word can be much larger (e.g. "ARIAN ANSARI" → "ARIAN" / "ANSARI") */
+      const lines = (isPortrait && word.includes(' ')) ? word.split(' ') : [word];
+      const longestLine = lines.reduce((a, b) =>
+        (oc.font = `bold 100px 'Syncopate', Arial, sans-serif`,
+         oc.measureText(a).width >= oc.measureText(b).width ? a : b));
+
+      let fontSize = Math.floor(isPortrait ? canvas.width * 0.5 : canvas.height * 0.28);
       oc.font = `bold ${fontSize}px 'Syncopate', Arial, sans-serif`;
-      while (oc.measureText(word).width > canvas.width * 0.88 && fontSize > 20) {
+      while (oc.measureText(longestLine).width > canvas.width * 0.88 && fontSize > 20) {
         fontSize -= 2;
         oc.font = `bold ${fontSize}px 'Syncopate', Arial, sans-serif`;
       }
       oc.fillStyle = 'white';
       oc.textAlign = 'center';
       oc.textBaseline = 'middle';
-      oc.fillText(word, canvas.width/2, canvas.height/2);
+      if (lines.length === 1) {
+        oc.fillText(word, canvas.width / 2, canvas.height / 2);
+      } else {
+        const lineH = fontSize * 1.35;
+        const totalH = lines.length * lineH;
+        lines.forEach((line, i) => {
+          oc.fillText(line, canvas.width / 2,
+            canvas.height / 2 - totalH / 2 + i * lineH + lineH / 2);
+        });
+      }
 
       const data   = oc.getImageData(0, 0, canvas.width, canvas.height).data;
       const coords = [];
