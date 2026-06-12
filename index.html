@@ -316,31 +316,44 @@
       background: rgba(255,255,255,0.025); filter:blur(80px);
       pointer-events:none;
     }
-    .about__grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; position:relative; z-index:1; }
+    /* 3-col: heading+stats | photo | text */
+    .about__grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1.4fr;
+      gap: 3rem 4rem;
+      align-items: start;
+      position: relative; z-index: 1;
+    }
     .about__heading {
       font-family: var(--f-head);
-      font-size: clamp(2.5rem,5vw,4.75rem);
-      font-weight:900; letter-spacing:-.045em; line-height:1.0; color: var(--white);
+      font-size: clamp(2.5rem,4.5vw,4.5rem);
+      font-weight: 900; letter-spacing: -.045em; line-height: 1.0; color: var(--white);
     }
     .about__heading em { font-style:italic; font-weight:300; color: rgba(255,255,255,0.3); }
     .about__stats { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; margin-top:3.5rem; padding-top:3.5rem; border-top:1px solid rgba(255,255,255,0.06); }
-    .stat__n { display:block; font-family:var(--f-head); font-size:clamp(2.75rem,5vw,4.5rem); font-weight:900; letter-spacing:-.05em; line-height:1; color: var(--white); }
+    .stat__n { display:block; font-family:var(--f-head); font-size:clamp(2.5rem,4.5vw,4.25rem); font-weight:900; letter-spacing:-.05em; line-height:1; color: var(--white); }
     .stat__l { display:block; font-size:.8125rem; color: var(--muted); margin-top:.375rem; }
-    .about__text { font-size:1.0625rem; color: rgba(255,255,255,0.5); line-height:1.78; }
-    .about__text p+p { margin-top:1.25rem; }
-    .about__right { display:flex; flex-direction:column; gap:2rem; }
-    .about__right p+p { margin-top:1.25rem; }
-    .about__photo { width:100%; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); }
-    .about__photo-inner { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; position:relative; }
-    .about__photo-inner::before,
-    .about__photo-inner::after {
-      content:''; position:absolute; width:1px; background:rgba(255,255,255,0.06);
-      top:0; bottom:0;
+
+    /* Photo column */
+    .about__photo { width:100%; aspect-ratio:3/4; border-radius:16px; overflow:hidden; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); }
+    .about__photo-inner { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; position:relative; overflow:hidden; }
+    .about__photo-inner::before {
+      content:'';
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent, transparent 28px,
+        rgba(255,255,255,0.025) 28px, rgba(255,255,255,0.025) 29px
+      );
     }
-    .about__photo-inner::before { left:50%; transform:translateX(-50%) rotate(45deg) scaleY(1.4); }
-    .about__photo-inner::after  { left:50%; transform:translateX(-50%) rotate(-45deg) scaleY(1.4); }
-    .about__photo-inner svg { width:48px; opacity:.15; }
-    .about__photo-label { font-family:'Space Grotesk',sans-serif; font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,0.2); }
+    .about__photo-inner svg { width:44px; opacity:.12; position:relative; z-index:1; }
+    .about__photo-label { font-family:'Space Grotesk',sans-serif; font-size:.625rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,0.18); position:relative; z-index:1; }
+
+    /* Text column */
+    .about__text-col { font-size:1.0625rem; color: rgba(255,255,255,0.5); line-height:1.82; padding-top:.25rem; }
+    .about__text-col p { margin-bottom:1.5rem; }
+    .about__text-col p:last-child { margin-bottom:0; }
+    .about__text-col strong { color: rgba(255,255,255,0.85); font-weight:500; }
 
     /* ─── Highlight Cards (Services) ────────────────────────────── */
     @keyframes hc-ping {
@@ -660,7 +673,8 @@
     /* ─── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 1024px) {
       .card--a, .card--b, .card--c { grid-column: span 12; }
-      .about__grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about__grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+      .about__text-col { grid-column: 1 / -1; }
       .about__stats { grid-template-columns: repeat(4, 1fr); }
       .hc-grid { grid-template-columns: repeat(2, 350px); }
     }
@@ -669,6 +683,8 @@
       .nav__links { display: none; }
       .nav__burger { display: flex; }
       .nav__mobile { display: block; }
+      .about__grid { grid-template-columns: 1fr; }
+      .about__text-col { grid-column: 1; }
       .about__stats { grid-template-columns: repeat(4, 1fr); }
       .h-canvas { width: min(680px, 92vw); height: min(425px, 57vw); }
     }
@@ -790,6 +806,8 @@
   <div class="container">
     <p class="eyebrow reveal" id="about-lbl">Über mich</p>
     <div class="about__grid">
+
+      <!-- Col 1: Heading + Stats -->
       <div>
         <h2 class="about__heading reveal">
           Digital.<br>
@@ -803,16 +821,22 @@
           <div><span class="stat__n">360°</span><span class="stat__l">Brand Experience</span></div>
         </div>
       </div>
-      <div class="about__right reveal" data-d="2">
-        <div class="about__photo" aria-label="Foto von Arian Ansari">
-          <div class="about__photo-inner">
-            <svg viewBox="0 0 1 1" aria-hidden="true"></svg>
-            <span class="about__photo-label">Foto folgt</span>
-          </div>
+
+      <!-- Col 2: Photo -->
+      <div class="about__photo reveal" data-d="1" aria-label="Foto von Arian Ansari">
+        <div class="about__photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="about__photo-label">Foto folgt</span>
         </div>
-        <p>Ich bin Arian Ansari — ich realisiere vollständige Markenauftritte für Unternehmen und Startups. Von der Website über Visitenkarten bis hin zu Auto-Folierungen, Glasfassaden, Firmenkleidung und Visual Effects.</p>
-        <p>Alles aus einer Hand. Alles im cinematischen, hochqualitativen Stil — weil eine starke Marke an jedem Touchpoint überzeugen muss.</p>
       </div>
+
+      <!-- Col 3: Text -->
+      <div class="about__text-col reveal" data-d="2">
+        <p>Ich bin <strong>Arian Ansari</strong>, Designer und Entwickler aus Berlin. Ich schaffe vollständige Markenauftritte für Unternehmen und Startups, die an jedem Punkt überzeugen.</p>
+        <p>Mein Ansatz geht weit über klassisches Webdesign hinaus. Visitenkarten, Auto-Folierungen, Glasfassaden, Firmenkleidung und Visual Effects gehören genauso dazu wie die Website selbst.</p>
+        <p>Alles aus einer Hand. Alles mit cinematischem Anspruch und dem Ziel, deine Marke unverwechselbar zu machen.</p>
+      </div>
+
     </div>
   </div>
 </section>
