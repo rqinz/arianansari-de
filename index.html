@@ -103,113 +103,28 @@
     }
     .nav__cta:hover { opacity: .8 !important; }
 
-    /* ─── Hero (Halide) ──────────────────────────────────────────── */
+    /* ─── Hero (Particle Text) ───────────────────────────────────── */
     .hero {
-      min-height: 100dvh; position: relative; overflow: hidden;
-      display: block; background: var(--bg);
+      min-height: 100dvh; background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: calc(var(--nav-h) + 2rem) var(--pad-x) clamp(2.5rem,5vw,4rem);
+      gap: 2rem;
     }
-
-    /* 3-D viewport */
-    .h-viewport {
-      position: absolute; inset: 0;
-      perspective: 2000px;
-      display: flex; align-items: center; justify-content: center;
+    .ptx-eyebrow {
+      font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--dim);
+      opacity: 0; animation: up .7s ease forwards .2s;
     }
-    .h-canvas {
-      position: relative;
-      width: min(800px, 95vw);
-      height: min(500px, 59vw);
-      transform-style: preserve-3d;
-      will-change: transform;
+    #ptxCanvas {
+      display: block; width: 100%; max-width: 1000px; height: auto;
+      border-radius: 4px;
+      opacity: 0; animation: up 1s cubic-bezier(.16,1,.3,1) forwards .5s;
     }
-    .h-layer {
-      position: absolute; inset: 0;
-      border: 1px solid rgba(224,224,224,0.07);
-      background-size: cover; background-position: center;
-      will-change: transform;
+    .ptx-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: up .7s ease forwards .9s;
     }
-    .h-layer-1 {
-      background-image: url('hero.jpg');
-      filter: grayscale(1) contrast(1.3) brightness(0.45);
-      transform: translateZ(20px);
-    }
-    .h-layer-2 {
-      background-image: url('hero.jpg');
-      filter: grayscale(1) contrast(1.1) brightness(0.65);
-      opacity: .5; mix-blend-mode: screen;
-      transform: translateZ(40px);
-    }
-    .h-layer-3 {
-      background-image: url('hero.jpg');
-      filter: grayscale(1) contrast(1.5) brightness(0.9);
-      opacity: .35; mix-blend-mode: overlay;
-      transform: translateZ(60px);
-    }
-    .h-contours {
-      position: absolute;
-      width: 200%; height: 200%; top: -50%; left: -50%;
-      background-image: repeating-radial-gradient(
-        circle at 50% 50%,
-        transparent 0, transparent 40px,
-        rgba(255,255,255,0.035) 41px, transparent 42px
-      );
-      transform: translateZ(120px);
-      pointer-events: none;
-    }
-
-    /* Interface overlay */
-    .h-interface {
-      position: absolute; inset: 0;
-      padding: var(--nav-h) var(--pad-x) clamp(2.5rem,5vw,4rem);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto 1fr;
-      z-index: 10; pointer-events: none;
-    }
-    .h-brand {
-      font-family: var(--f-head); font-size: .72rem; font-weight: 700;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: rgba(255,255,255,0.4); align-self: start; padding-top: 1.25rem;
-      opacity: 0; animation: up .6s ease forwards .2s;
-    }
-    .h-coords {
-      text-align: right; font-family: monospace; font-size: .62rem;
-      color: #ff3c00; line-height: 1.9; letter-spacing: .06em;
-      align-self: start; padding-top: 1.25rem;
-      opacity: 0; animation: up .6s ease forwards .3s;
-    }
-    .h-title {
-      grid-column: 1 / -1; align-self: center;
-      font-family: 'Syncopate', sans-serif;
-      font-size: clamp(3.75rem, 12.5vw, 11.5rem);
-      font-weight: 700; line-height: .88; letter-spacing: -.01em;
-      color: var(--white);
-      mix-blend-mode: difference;
-      text-shadow: 0 0 60px rgba(255,255,255,.14), 0 0 140px rgba(255,255,255,.06);
-      opacity: 0; animation: up 1s cubic-bezier(.16,1,.3,1) forwards .5s, glow 4s ease-in-out infinite 1.5s;
-    }
-    .h-footer {
-      grid-column: 1 / -1;
-      display: flex; justify-content: space-between; align-items: flex-end;
-      gap: 2rem; flex-wrap: wrap;
-      opacity: 0; animation: up .7s ease forwards .8s;
-    }
-    .h-meta {
-      font-family: monospace; font-size: .68rem;
-      color: rgba(255,255,255,0.28); line-height: 1.9; letter-spacing: .07em;
-    }
-    .h-cta {
-      pointer-events: auto;
-      display: inline-block;
-      background: rgba(245,245,247,0.95); color: #060608;
-      padding: .9rem 1.875rem;
-      font-family: 'Syncopate', sans-serif; font-size: .68rem; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
-      clip-path: polygon(0 0, 100% 0, 100% 65%, 87% 100%, 0 100%);
-      transition: background .3s, color .3s, transform .3s;
-      white-space: nowrap;
-    }
-    .h-cta:hover { background: #ff3c00; color: #fff; transform: translateY(-5px); }
 
 
     /* ─── Ticker ─────────────────────────────────────────────────── */
@@ -686,22 +601,9 @@
       .about__grid { grid-template-columns: 1fr; }
       .about__text-col { grid-column: 1; }
       .about__stats { grid-template-columns: repeat(4, 1fr); }
-      .h-canvas { width: min(680px, 92vw); height: min(425px, 57vw); }
+      .ptx-actions { flex-direction: column; align-items: stretch; }
     }
     @media (max-width: 640px) {
-      .h-viewport {
-        align-items: flex-end;
-        perspective: 1100px;
-        perspective-origin: 50% 20%;
-      }
-      .h-canvas { width: 155vw; height: 145vw; }
-      .h-interface {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        align-content: start;
-        padding-bottom: 0;
-      }
-      .h-title { align-self: start; padding-top: .375rem; }
       .about__stats { grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 2.5rem; padding-top: 2.5rem; }
       .hc-grid { grid-template-columns: 1fr; justify-items: center; }
       .hc-card, .hc-wrap { width: 100%; max-width: 350px; }
@@ -712,9 +614,6 @@
       .footer__inner { flex-direction: column; text-align: center; gap: .625rem; }
       .footer__links { justify-content: center; flex-wrap: wrap; gap: .5rem 1.25rem; }
       .contact__heading { font-size: clamp(2.75rem, 13vw, 8.5rem); }
-    }
-    @media (max-width: 390px) {
-      .h-title { font-size: clamp(2.5rem, 14.5vw, 10.5rem); }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -746,26 +645,14 @@
   </ul>
 </div>
 
-<!-- ── Hero (Halide) ──────────────────────────────────────────────── -->
+<!-- ── Hero (Particle Text) ───────────────────────────────────────── -->
 <section class="hero" id="hero" aria-label="Einleitung">
-
-  <!-- 3-D Canvas -->
-  <div class="h-viewport" aria-hidden="true">
-    <div class="h-canvas" id="halideCanvas">
-      <div class="h-layer h-layer-1" data-depth="0"></div>
-      <div class="h-layer h-layer-2" data-depth="1"></div>
-      <div class="h-layer h-layer-3" data-depth="2"></div>
-      <div class="h-contours"></div>
-    </div>
+  <p class="ptx-eyebrow">Arian Ansari &nbsp;·&nbsp; Berlin &nbsp;·&nbsp; Designer &amp; Developer</p>
+  <canvas id="ptxCanvas" aria-label="Animierter Schriftzug"></canvas>
+  <div class="ptx-actions">
+    <a href="#contact" class="btn btn--primary">Projekt anfragen</a>
+    <a href="#about" class="btn btn--ghost">Mehr erfahren</a>
   </div>
-
-  <!-- Interface overlay -->
-  <div class="h-interface">
-    <div class="h-brand">ARIANANSARI.DE</div>
-
-    <h1 class="h-title">DEINE<br>MARKE.</h1>
-  </div>
-
 </section>
 
 <!-- ── Ticker ────────────────────────────────────────────────────── -->
@@ -1117,40 +1004,150 @@
     nav.classList.toggle('is-scrolled', window.scrollY > 20);
   }, { passive: true });
 
-  /* ── Halide Hero 3-D parallax ── */
-  const halideCanvas = document.getElementById('halideCanvas');
-  const halideLayers = document.querySelectorAll('.h-layer');
+  /* ── Particle Text Hero ── */
+  (function () {
+    const canvas = document.getElementById('ptxCanvas');
+    if (!canvas) return;
+    canvas.width  = 1000;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
 
-  if (halideCanvas) {
-    // Entrance animation
-    const isMobile = window.innerWidth <= 640;
-    const rotX = isMobile ? 58 : 55;
-    const rotZ = isMobile ? -22 : -25;
+    const WORDS      = ['DEINE MARKE', 'WEBDESIGN', 'BERLIN', 'BRAND', 'VFX'];
+    const PIXEL_STEP = 6;
+    let particles    = [];
+    let frameCount   = 0;
+    let wordIndex    = 0;
 
-    halideCanvas.style.opacity = '0';
-    halideCanvas.style.transform = 'rotateX(90deg) rotateZ(0deg) scale(0.8)';
-    setTimeout(() => {
-      halideCanvas.style.transition = 'all 2.5s cubic-bezier(0.16, 1, 0.3, 1)';
-      halideCanvas.style.opacity = '1';
-      halideCanvas.style.transform = `rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(1)`;
-    }, 300);
-
-    // Mouse parallax — only on non-touch devices while hero is in view
-    if (!('ontouchstart' in window)) {
-      window.addEventListener('mousemove', (e) => {
-        if (window.scrollY > window.innerHeight) return;
-        const x = (window.innerWidth  / 2 - e.pageX) / 25;
-        const y = (window.innerHeight / 2 - e.pageY) / 25;
-        halideCanvas.style.transition = 'transform 0.8s cubic-bezier(0.16,1,0.3,1)';
-        halideCanvas.style.transform = `rotateX(${rotX + y * 0.5}deg) rotateZ(${rotZ + x * 0.5}deg)`;
-        halideLayers.forEach((layer, i) => {
-          const moveX = x * (i + 1) * 0.2;
-          const moveY = y * (i + 1) * 0.2;
-          layer.style.transform = `translateZ(${(i + 1) * 20}px) translate(${moveX}px,${moveY}px)`;
-        });
-      }, { passive: true });
+    function randomPos(cx, cy, mag) {
+      const rx = Math.random() * canvas.width;
+      const ry = Math.random() * canvas.height;
+      const dx = rx - cx, dy = ry - cy;
+      const m  = Math.sqrt(dx*dx + dy*dy) || 1;
+      return { x: cx + dx/m*mag, y: cy + dy/m*mag };
     }
-  }
+
+    class Particle {
+      constructor() {
+        this.pos = { x: 0, y: 0 };
+        this.vel = { x: 0, y: 0 };
+        this.acc = { x: 0, y: 0 };
+        this.target = { x: 0, y: 0 };
+        this.maxSpeed = 1; this.maxForce = 0.1;
+        this.isKilled = false;
+        this.sR = 0; this.sG = 0; this.sB = 0;
+        this.tR = 0; this.tG = 0; this.tB = 0;
+        this.cw = 0; this.blendRate = 0.01;
+      }
+      move() {
+        const dx = this.target.x - this.pos.x;
+        const dy = this.target.y - this.pos.y;
+        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        const prox = dist < 100 ? dist/100 : 1;
+        const spd  = this.maxSpeed * prox;
+        const tx   = dx/dist*spd - this.vel.x;
+        const ty   = dy/dist*spd - this.vel.y;
+        const sm   = Math.sqrt(tx*tx + ty*ty) || 1;
+        this.acc.x += tx/sm * this.maxForce;
+        this.acc.y += ty/sm * this.maxForce;
+        this.vel.x += this.acc.x; this.vel.y += this.acc.y;
+        this.pos.x += this.vel.x; this.pos.y += this.vel.y;
+        this.acc.x = 0; this.acc.y = 0;
+      }
+      draw() {
+        if (this.cw < 1) this.cw = Math.min(this.cw + this.blendRate, 1);
+        const r = Math.round(this.sR + (this.tR - this.sR) * this.cw);
+        const g = Math.round(this.sG + (this.tG - this.sG) * this.cw);
+        const b = Math.round(this.sB + (this.tB - this.sB) * this.cw);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillRect(this.pos.x, this.pos.y, 2, 2);
+      }
+      kill() {
+        if (this.isKilled) return;
+        const rp = randomPos(canvas.width/2, canvas.height/2, (canvas.width+canvas.height)/2);
+        this.target = rp;
+        this.sR = Math.round(this.sR + (this.tR - this.sR) * this.cw);
+        this.sG = Math.round(this.sG + (this.tG - this.sG) * this.cw);
+        this.sB = Math.round(this.sB + (this.tB - this.sB) * this.cw);
+        this.tR = 0; this.tG = 0; this.tB = 0; this.cw = 0;
+        this.isKilled = true;
+      }
+    }
+
+    function showWord(word) {
+      const off = document.createElement('canvas');
+      off.width = canvas.width; off.height = canvas.height;
+      const oc = off.getContext('2d');
+
+      /* auto-fit font size */
+      let fontSize = 140;
+      oc.font = `bold ${fontSize}px 'Syncopate', Arial, sans-serif`;
+      while (oc.measureText(word).width > canvas.width * 0.9 && fontSize > 40) {
+        fontSize -= 4;
+        oc.font = `bold ${fontSize}px 'Syncopate', Arial, sans-serif`;
+      }
+      oc.fillStyle = 'white';
+      oc.textAlign = 'center';
+      oc.textBaseline = 'middle';
+      oc.fillText(word, canvas.width/2, canvas.height/2);
+
+      const data   = oc.getImageData(0, 0, canvas.width, canvas.height).data;
+      const coords = [];
+      for (let i = 0; i < data.length; i += PIXEL_STEP * 4) {
+        if (data[i + 3] > 0) coords.push(i);
+      }
+      /* shuffle */
+      for (let i = coords.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [coords[i], coords[j]] = [coords[j], coords[i]];
+      }
+
+      let pi = 0;
+      for (const ci of coords) {
+        const x = (ci/4) % canvas.width;
+        const y = Math.floor((ci/4) / canvas.width);
+        let p;
+        if (pi < particles.length) {
+          p = particles[pi]; p.isKilled = false; pi++;
+        } else {
+          p = new Particle();
+          const rp = randomPos(canvas.width/2, canvas.height/2, (canvas.width+canvas.height)/2);
+          p.pos.x = rp.x; p.pos.y = rp.y;
+          p.maxSpeed    = Math.random() * 6 + 4;
+          p.maxForce    = p.maxSpeed * 0.05;
+          p.blendRate   = Math.random() * 0.025 + 0.005;
+          particles.push(p);
+        }
+        p.sR = Math.round(p.sR + (p.tR - p.sR) * p.cw);
+        p.sG = Math.round(p.sG + (p.tG - p.sG) * p.cw);
+        p.sB = Math.round(p.sB + (p.tB - p.sB) * p.cw);
+        p.tR = 245; p.tG = 245; p.tB = 247; /* var(--white) */
+        p.cw = 0;
+        p.target.x = x; p.target.y = y;
+      }
+      for (let i = pi; i < particles.length; i++) particles[i].kill();
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.move(); p.draw();
+        if (p.isKilled && (p.pos.x < -10 || p.pos.x > canvas.width + 10 || p.pos.y < -10 || p.pos.y > canvas.height + 10)) {
+          particles.splice(i, 1);
+        }
+      }
+      frameCount++;
+      if (frameCount % 220 === 0) {
+        wordIndex = (wordIndex + 1) % WORDS.length;
+        showWord(WORDS[wordIndex]);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    showWord(WORDS[0]);
+    animate();
+  })();
 
   /* ── Scroll reveal ── */
   const io = new IntersectionObserver((entries) => {
