@@ -253,6 +253,22 @@
     }
     .about__stats { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; margin-top:3.5rem; padding-top:3.5rem; border-top:1px solid rgba(255,255,255,0.06); }
     .stat__n { display:block; font-family:var(--f-head); font-size:clamp(2.5rem,4.5vw,4.25rem); font-weight:900; letter-spacing:-.05em; line-height:1; color: var(--white); }
+    .stat__n--shine {
+      background: linear-gradient(
+        105deg,
+        rgba(245,245,247,.30) 0%,
+        rgba(245,245,247,.45) 30%,
+        rgba(255,255,255,.88) 48%,
+        rgba(255,255,255,1)   50%,
+        rgba(255,255,255,.88) 52%,
+        rgba(245,245,247,.45) 70%,
+        rgba(245,245,247,.30) 100%
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      animation: shine 7s ease-in-out infinite;
+    }
     .stat__l { display:block; font-size:.8125rem; color: var(--muted); margin-top:.375rem; }
 
     /* Photo column */
@@ -798,7 +814,7 @@
           <div><span class="stat__n" data-count="5">0</span><span class="stat__l">Jahre Erfahrung</span></div>
           <div><span class="stat__n" data-count="80">0</span><span class="stat__l">Projekte</span></div>
           <div><span class="stat__n" data-count="50">0</span><span class="stat__l">Kunden</span></div>
-          <div><span class="stat__n">360°</span><span class="stat__l">Brand Experience</span></div>
+          <div><span class="stat__n stat__n--shine">360°</span><span class="stat__l">Brand Experience</span></div>
         </div>
       </div>
 
