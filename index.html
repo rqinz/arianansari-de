@@ -213,7 +213,7 @@
     .card:hover .card__arrow { background: var(--white); color: var(--bg); border-color: var(--white); }
 
     /* ─── About ──────────────────────────────────────────────────── */
-    .about { background: var(--bg-2); position: relative; overflow: hidden; }
+    .about { background: var(--bg); position: relative; overflow: hidden; }
     .about::before {
       content:'';
       position:absolute; top:-200px; right:-100px;
@@ -1314,7 +1314,6 @@ for (let i = 0; i < IMAGE_COUNT; i++) {
   const m = new THREE.Matrix4();
   m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
   mesh.rotation.setFromRotationMatrix(m);
-  mesh.rotation.z += Math.PI;
 
   group.add(mesh);
 }
