@@ -988,6 +988,10 @@
     let particles    = [];
     let frameCount   = 0;
     let wordIndex    = 0;
+    /* frames each word stays visible (60fps ≈ 1s per 60 frames)
+       ARIAN ANSARI: ~14s, rest: ~9s */
+    const DURATIONS  = [840, 540, 540, 540, 540, 540, 540];
+    let nextWordFrame = DURATIONS[0];
 
     function randomPos(cx, cy, mag) {
       const rx = Math.random() * canvas.width;
@@ -1083,8 +1087,8 @@
           p = new Particle();
           const rp = randomPos(canvas.width/2, canvas.height/2, (canvas.width+canvas.height)/2);
           p.pos.x = rp.x; p.pos.y = rp.y;
-          p.maxSpeed    = Math.random() * 6 + 4;
-          p.maxForce    = p.maxSpeed * 0.05;
+          p.maxSpeed    = Math.random() * 10 + 10;
+          p.maxForce    = p.maxSpeed * 0.06;
           p.blendRate   = Math.random() * 0.025 + 0.005;
           particles.push(p);
         } else {
@@ -1111,9 +1115,10 @@
         }
       }
       frameCount++;
-      if (frameCount % 580 === 0) {
+      if (frameCount >= nextWordFrame) {
         wordIndex = (wordIndex + 1) % WORDS.length;
         showWord(WORDS[wordIndex]);
+        nextWordFrame = frameCount + DURATIONS[wordIndex];
       }
       requestAnimationFrame(animate);
     }
