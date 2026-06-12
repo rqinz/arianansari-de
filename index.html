@@ -1044,7 +1044,7 @@
       }
     }
 
-    function showWord(word) {
+    function showWord(word, allowSpawn = false) {
       const off = document.createElement('canvas');
       off.width = canvas.width; off.height = canvas.height;
       const oc = off.getContext('2d');
@@ -1079,7 +1079,7 @@
         let p;
         if (pi < particles.length) {
           p = particles[pi]; p.isKilled = false; pi++;
-        } else {
+        } else if (allowSpawn) {
           p = new Particle();
           const rp = randomPos(canvas.width/2, canvas.height/2, (canvas.width+canvas.height)/2);
           p.pos.x = rp.x; p.pos.y = rp.y;
@@ -1087,6 +1087,8 @@
           p.maxForce    = p.maxSpeed * 0.05;
           p.blendRate   = Math.random() * 0.025 + 0.005;
           particles.push(p);
+        } else {
+          continue; /* no new particles on word change */
         }
         p.sR = Math.round(p.sR + (p.tR - p.sR) * p.cw);
         p.sG = Math.round(p.sG + (p.tG - p.sG) * p.cw);
@@ -1123,11 +1125,11 @@
       resizeTimer = setTimeout(() => {
         particles = [];
         setSize();
-        showWord(WORDS[wordIndex]);
+        showWord(WORDS[wordIndex], true);
       }, 150);
     }, { passive: true });
 
-    showWord(WORDS[0]);
+    showWord(WORDS[0], true);
     animate();
   })();
 
