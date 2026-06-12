@@ -1382,7 +1382,7 @@ for (let i = 0; i < IMAGE_COUNT; i++) {
   mesh.position.copy(p);
 
   const m = new THREE.Matrix4();
-  m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
+  m.lookAt(p, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0));
   mesh.rotation.setFromRotationMatrix(m);
   group.add(mesh);
 
