@@ -1294,31 +1294,19 @@ if (!canvas) throw new Error('no canvas');
 const PARTICLE_COUNT  = 600;
 const SPHERE_RADIUS   = 9;
 const POSITION_NOISE  = 4;
-const IMAGE_COUNT     = 16;
-const IMAGE_SIZE      = 1.5;
 const ROTATE_Y        = 0.0005;
 
-function makePlaceholderTexture(index) {
-  const size = 512;
-  const c = document.createElement('canvas');
-  c.width = c.height = size;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = '#0c0c0f';
-  ctx.fillRect(0, 0, size, size);
-  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(12, 12, size - 24, size - 24);
-  ctx.beginPath();
-  ctx.moveTo(12, 12); ctx.lineTo(size - 12, size - 12);
-  ctx.moveTo(size - 12, 12); ctx.lineTo(12, size - 12);
-  ctx.stroke();
-  ctx.fillStyle = 'rgba(255,255,255,0.18)';
-  ctx.font = 'bold 72px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(String(index + 1).padStart(2, '0'), size / 2, size / 2);
-  return new THREE.CanvasTexture(c);
-}
+/* Real work images — width/height define the plane aspect ratio in 3-D space */
+const GALLERY = [
+  { src: 'work/g1.jpg', w: 1.5,  h: 1.5  },  // 3-D golden S logo
+  { src: 'work/g2.jpg', w: 1.5,  h: 1.5  },  // Core neon logo
+  { src: 'work/g3.jpg', w: 1.5,  h: 1.5  },  // HanseWebseiten flat logo
+  { src: 'work/g4.jpg', w: 1.63, h: 1.5  },  // HanseWebseiten 3-D app icon
+  { src: 'work/g5.jpg', w: 1.5,  h: 1.5  },  // HanseWebseiten chrome 3-D
+  { src: 'work/g6.jpg', w: 2.67, h: 1.5  },  // Website iPhone mockup  (16:9)
+  { src: 'work/g7.jpg', w: 2.69, h: 1.5  },  // VFX red melt render    (~16:9)
+];
+const IMAGE_COUNT = GALLERY.length;
 
 const section = canvas.parentElement;
 const W = () => section.clientWidth;
@@ -1379,25 +1367,32 @@ group.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
 })));
 
 /* ── orbiting image planes ── */
+const loader = new THREE.TextureLoader();
+
 for (let i = 0; i < IMAGE_COUNT; i++) {
-  const tex   = makePlaceholderTexture(i);
+  const img   = GALLERY[i];
   const angle = (i / IMAGE_COUNT) * Math.PI * 2;
   const p     = new THREE.Vector3(
     SPHERE_RADIUS * Math.cos(angle), 0,
     SPHERE_RADIUS * Math.sin(angle)
   );
 
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(IMAGE_SIZE, IMAGE_SIZE),
-    new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
-  );
+  const mat  = new THREE.MeshBasicMaterial({ color: 0x111114, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(img.w, img.h), mat);
   mesh.position.copy(p);
 
   const m = new THREE.Matrix4();
   m.lookAt(p, p.clone().add(p.clone().normalize()), new THREE.Vector3(0, 1, 0));
   mesh.rotation.setFromRotationMatrix(m);
-
   group.add(mesh);
+
+  /* load texture asynchronously — swap in when ready */
+  loader.load(img.src, (tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    mat.map = tex;
+    mat.color.set(0xffffff);
+    mat.needsUpdate = true;
+  });
 }
 
 /* ── resize ── */
