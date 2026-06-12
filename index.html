@@ -106,7 +106,7 @@
     /* ─── Hero (Particle Text) ───────────────────────────────────── */
     .hero {
       position: relative;
-      min-height: 100dvh; background: #000; overflow: hidden;
+      min-height: 100dvh; background: var(--bg); overflow: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: space-between;
       padding: calc(var(--nav-h) + 1.5rem) var(--pad-x) clamp(2.5rem,5vw,4rem);
@@ -990,7 +990,7 @@
     let wordIndex    = 0;
     /* frames each word stays visible (60fps ≈ 1s per 60 frames)
        ARIAN ANSARI: ~14s, rest: ~9s */
-    const DURATIONS  = [840, 540, 540, 540, 540, 540, 540];
+    const DURATIONS  = [150, 150, 150, 150, 150, 150, 150];
     let nextWordFrame = DURATIONS[0];
 
     function randomPos(cx, cy, mag) {
@@ -1105,7 +1105,7 @@
     }
 
     function animate() {
-      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillStyle = 'rgba(6,6,8,0.14)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
