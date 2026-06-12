@@ -456,16 +456,18 @@
       font-style:italic; font-weight:300; display:block;
       background: linear-gradient(
         105deg,
-        rgba(245,245,247,.25) 0%,
-        rgba(245,245,247,.90) 35%,
-        #fff 50%,
-        rgba(245,245,247,.90) 65%,
-        rgba(245,245,247,.25) 100%
+        rgba(245,245,247,.30) 0%,
+        rgba(245,245,247,.45) 30%,
+        rgba(255,255,255,.88) 48%,
+        rgba(255,255,255,1)   50%,
+        rgba(255,255,255,.88) 52%,
+        rgba(245,245,247,.45) 70%,
+        rgba(245,245,247,.30) 100%
       );
-      background-size: 250% auto;
+      background-size: 300% auto;
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent; color: transparent;
-      animation: shine 3.6s linear infinite;
+      animation: shine 7s ease-in-out infinite;
     }
     @keyframes shine {
       0%   { background-position: 200% center; }
@@ -1357,7 +1359,7 @@ window.addEventListener('resize', () => {
 <!-- ── Impressum Modal ───────────────────────────────────────────── -->
 <div class="legal-modal" id="impressum" role="dialog" aria-modal="true" aria-labelledby="impressum-title">
   <div class="legal-modal__box">
-    <button class="legal-modal__close" aria-label="Schließen">✕</button>
+    <a href="#" class="legal-modal__close" aria-label="Schließen">✕</a>
     <h2 id="impressum-title">Impressum</h2>
 
     <p><strong>Angaben gemäß § 5 TMG</strong></p>
@@ -1391,7 +1393,7 @@ window.addEventListener('resize', () => {
 <!-- ── Datenschutz Modal ─────────────────────────────────────────── -->
 <div class="legal-modal" id="datenschutz" role="dialog" aria-modal="true" aria-labelledby="datenschutz-title">
   <div class="legal-modal__box">
-    <button class="legal-modal__close" aria-label="Schließen">✕</button>
+    <a href="#" class="legal-modal__close" aria-label="Schließen">✕</a>
     <h2 id="datenschutz-title">Datenschutzerklärung</h2>
 
     <p><strong>1. Verantwortlicher (Art. 13 DSGVO)</strong><br>
@@ -1450,7 +1452,7 @@ window.addEventListener('resize', () => {
     background: rgba(255,255,255,.07); border: none; color: var(--muted);
     width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
     font-size: .8rem; display: flex; align-items: center; justify-content: center;
-    transition: background .2s, color .2s;
+    transition: background .2s, color .2s; text-decoration: none;
   }
   .legal-modal__close:hover { background: rgba(255,255,255,.14); color: var(--white); }
 </style>
