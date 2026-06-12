@@ -106,7 +106,7 @@
     /* ─── Hero (Particle Text) ───────────────────────────────────── */
     .hero {
       position: relative;
-      min-height: 100dvh; background: var(--bg); overflow: hidden;
+      min-height: 100dvh; background: #000; overflow: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: space-between;
       padding: calc(var(--nav-h) + 1.5rem) var(--pad-x) clamp(2.5rem,5vw,4rem);
@@ -1104,7 +1104,7 @@
     }
 
     function animate() {
-      ctx.fillStyle = 'rgba(6,6,8,0.14)';
+      ctx.fillStyle = 'rgba(0,0,0,0.14)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
