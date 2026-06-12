@@ -1047,7 +1047,8 @@
     setSize();
 
     const WORDS      = ['ARIAN ANSARI', 'DEINE MARKE', 'WEBDESIGN', 'VFX', 'BRANDING', 'FOLIERUNG', 'FIRMENKLEIDUNG'];
-    const PIXEL_STEP = 18;
+    /* smaller step on mobile = more particles = denser, more readable text */
+    const PIXEL_STEP = canvas.offsetWidth < 600 ? 7 : 18;
     let particles    = [];
     let frameCount   = 0;
     let wordIndex    = 0;
