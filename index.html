@@ -477,39 +477,52 @@
     .contact__actions { display:flex; justify-content:center; flex-wrap:wrap; gap:.875rem; position:relative; z-index:1; }
 
     /* Buttons */
-    /* Liquid Metal Button */
-    .lmb {
+    /* Metal Button */
+    .mbtn {
       position: relative; display: inline-flex; border-radius: 100px;
-      cursor: pointer; flex-shrink: 0;
-      transition: box-shadow .25s ease, transform .15s ease;
-      box-shadow: 0 0 0 1px rgba(180,180,180,.10), 0 4px 14px rgba(0,0,0,.25);
+      padding: 1.5px; flex-shrink: 0;
+      background: linear-gradient(to bottom, #111, #888);
+      box-shadow: 0 3px 8px rgba(0,0,0,.3);
+      transform-origin: center;
+      transition: box-shadow 250ms cubic-bezier(.1,.4,.2,1),
+                  transform   250ms cubic-bezier(.1,.4,.2,1);
     }
-    .lmb:hover { box-shadow: 0 0 0 1px rgba(200,200,200,.18), 0 8px 28px rgba(0,0,0,.4); }
-    .lmb-canvas { position:absolute; inset:0; width:100%; height:100%; border-radius:100px; display:block; }
-    .lmb-inner  {
-      position:absolute; inset:0; border-radius:100px;
-      background:rgba(0,0,0,.44); transition:background .2s;
+    .mbtn-inner {
+      position: absolute; inset: 1px; border-radius: 100px;
+      background: linear-gradient(to bottom, #f5f5f5, #3a3a3a 50%, #e0e0e0);
+      transition: filter 250ms cubic-bezier(.1,.4,.2,1);
+      pointer-events: none;
     }
-    .lmb:hover .lmb-inner { background:rgba(0,0,0,.32); }
-    .lmb-label  {
-      position:relative; z-index:2; display:inline-flex; align-items:center; gap:.5rem;
-      padding:.875rem 1.875rem; color:rgba(255,255,255,.92); font-size:1rem; font-weight:600;
-      font-family:var(--f-body); white-space:nowrap;
-      text-shadow:0 1px 4px rgba(0,0,0,.8); pointer-events:none; user-select:none;
+    .mbtn-face {
+      position: relative; z-index: 2;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .5rem; padding: .875rem 1.875rem;
+      margin: 1px; border-radius: 100px;
+      background: linear-gradient(to bottom, #c2c2c2, #8e8e8e);
+      color: #fff; font-family: var(--f-body); font-size: 1rem; font-weight: 600;
+      text-shadow: 0 -1px 0 rgba(60,60,60,.9);
+      text-decoration: none; white-space: nowrap; cursor: pointer;
+      overflow: hidden;
+      transition: transform 250ms cubic-bezier(.1,.4,.2,1),
+                  filter   250ms cubic-bezier(.1,.4,.2,1);
     }
-    .lmb-label svg { opacity:.9; }
-    .lmb-hit {
-      position:absolute; inset:0; z-index:10; border-radius:100px;
-      overflow:hidden; background:transparent; border:none;
-      cursor:pointer; outline:none; text-decoration:none; display:block;
+    .mbtn-face svg { flex-shrink: 0; }
+    .mbtn-shine {
+      pointer-events: none; position: absolute; inset: 0; border-radius: 100px;
+      background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.18) 50%, transparent 65%);
+      opacity: 0; transition: opacity 300ms;
     }
-    .lmb-hit:focus-visible { outline:2px solid rgba(255,255,255,.35); outline-offset:3px; }
-    @keyframes lmb-ripple {
-      0%   { transform:translate(-50%,-50%) scale(0); opacity:.45; }
-      100% { transform:translate(-50%,-50%) scale(5); opacity:0; }
+    .mbtn-hover { pointer-events: none; position: absolute; inset: 0; border-radius: 100px;
+      background: linear-gradient(to top, transparent, rgba(255,255,255,.06)); opacity: 0; transition: opacity 250ms; }
+    .mbtn:focus-visible { outline: 2px solid rgba(255,255,255,.4); outline-offset: 3px; }
+    @keyframes mbtn-ripple {
+      0%   { transform: translate(-50%,-50%) scale(0); opacity: .4; }
+      100% { transform: translate(-50%,-50%) scale(6); opacity: 0; }
     }
-    /* keep layout helpers that target .btn via parent selectors */
-    .ptx-actions .lmb { justify-content:center; }
+    .ptx-actions .mbtn,
+    .contact__actions .mbtn { justify-content: center; }
+    .contact__actions .mbtn { width: 100%; }
+    .contact__actions .mbtn-face { width: 100%; }
 
     /* ─── Footer ─────────────────────────────────────────────────── */
     .footer { border-top:1px solid rgba(255,255,255,0.06); padding:2.25rem var(--pad-x); }
@@ -636,8 +649,6 @@
       .hc-card { width: 100%; }
       .card__body { padding: 1.25rem 1.25rem 1.5rem; }
       .contact__actions { flex-direction: column; align-items: stretch; }
-      .contact__actions .lmb { width: 100%; }
-      .contact__actions .lmb-label { justify-content: center; width: 100%; }
       .footer__inner { flex-direction: column; text-align: center; gap: .625rem; }
       .footer__links { justify-content: center; flex-wrap: wrap; gap: .5rem 1.25rem; }
       .contact__heading { font-size: clamp(2.75rem, 13vw, 8.5rem); }
@@ -1176,124 +1187,76 @@
     animate();
   })();
 
-  /* ── Liquid Metal Buttons ── */
-  (function () {
-    const VS = `attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.,1.);}`;
-    const FS = `precision highp float;
-uniform float u_time;uniform vec2 u_resolution;
-float h(vec2 p){p=fract(p*vec2(234.34,435.345));p+=dot(p,p+34.23);return fract(p.x*p.y);}
-float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),f.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),f.x),f.y);}
-float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.+vec2(1.7,9.2);a*=.5;}return v;}
-void main(){
-  vec2 uv=gl_FragCoord.xy/u_resolution;
-  float t=u_time*.55;
-  vec2 q=vec2(fbm(uv*2.+t*.4),fbm(uv*2.+vec2(1.,t*.3)));
-  vec2 r=vec2(fbm(uv*3.+1.2*q+vec2(1.7,9.2)+t*.15),fbm(uv*3.+1.2*q+vec2(8.3,2.8)+t*.1));
-  float f=fbm(uv*2.5+1.5*r);
-  vec3 c=mix(vec3(.04,.04,.06),vec3(.48,.52,.60),smoothstep(.15,.55,f));
-  c=mix(c,vec3(.78,.82,.90),smoothstep(.50,.70,f));
-  c=mix(c,vec3(1.),smoothstep(.72,.92,f));
-  c=mix(c,vec3(.97,.94,.87),smoothstep(.86,1.,f)*.5);
-  gl_FragColor=vec4(c,1.);
-}`;
+  /* ── Metal Buttons ── */
+  document.querySelectorAll('.btn').forEach(orig => {
+    const href    = orig.getAttribute('href');
+    const target  = orig.getAttribute('target');
+    const rel     = orig.getAttribute('rel');
+    const content = orig.innerHTML;
 
-    function buildProgram(gl) {
-      const mk = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh,s); gl.compileShader(sh); return sh; };
-      const p = gl.createProgram();
-      gl.attachShader(p, mk(gl.VERTEX_SHADER, VS));
-      gl.attachShader(p, mk(gl.FRAGMENT_SHADER, FS));
-      gl.linkProgram(p); return p;
-    }
+    /* build structure */
+    const wrap  = document.createElement('div');   wrap.className  = 'mbtn';
+    const inner = document.createElement('div');   inner.className = 'mbtn-inner';
+    const face  = document.createElement('a');     face.className  = 'mbtn-face';
+    const shine = document.createElement('div');   shine.className = 'mbtn-shine';
+    const hover = document.createElement('div');   hover.className = 'mbtn-hover';
 
-    class MetalShader {
-      constructor(canvas) {
-        this.canvas = canvas; this.speed = 1.5; this.t0 = performance.now(); this.alive = true;
-        const gl = this.gl = canvas.getContext('webgl', { antialias:true, alpha:false, powerPreference:'low-power' });
-        if (!gl) return;
-        const p = buildProgram(gl); gl.useProgram(p);
-        const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-        const loc = gl.getAttribLocation(p,'a_pos'); gl.enableVertexAttribArray(loc);
-        gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-        this.uT = gl.getUniformLocation(p,'u_time');
-        this.uR = gl.getUniformLocation(p,'u_resolution');
-        this._tick = this._tick.bind(this);
-        this.resize(); requestAnimationFrame(this._tick);
-      }
-      resize() {
-        const {canvas,gl} = this; if(!gl) return;
-        const dpr = Math.min(devicePixelRatio,2);
-        const w = canvas.offsetWidth, h = canvas.offsetHeight;
-        if (!w || !h) return;
-        canvas.width = w*dpr; canvas.height = h*dpr;
-        gl.viewport(0,0,canvas.width,canvas.height);
-      }
-      _tick() {
-        if (!this.alive || !this.gl) return;
-        if (!this.canvas.width) this.resize(); /* retry if size was 0 */
-        const t = (performance.now()-this.t0)/1000*this.speed;
-        this.gl.uniform1f(this.uT, t);
-        this.gl.uniform2f(this.uR, this.canvas.width, this.canvas.height);
-        this.gl.drawArrays(this.gl.TRIANGLE_STRIP,0,4);
-        requestAnimationFrame(this._tick);
-      }
-      setSpeed(s) { this.speed = s; }
-      destroy() { this.alive = false; }
-    }
+    if (href)   face.href   = href;
+    if (target) face.target = target;
+    if (rel)    face.rel    = rel;
 
-    document.querySelectorAll('.btn').forEach(orig => {
-      const href = orig.getAttribute('href'), target = orig.getAttribute('target'),
-            rel  = orig.getAttribute('rel'),  content = orig.innerHTML;
+    face.innerHTML = content;
+    face.prepend(shine);
+    face.appendChild(hover);
+    wrap.append(inner, face);
+    orig.replaceWith(wrap);
 
-      const wrap  = document.createElement('div');  wrap.className  = 'lmb';
-      const cv    = document.createElement('canvas'); cv.className   = 'lmb-canvas';
-      const inner = document.createElement('div');  inner.className = 'lmb-inner';
-      const label = document.createElement('div');  label.className = 'lmb-label'; label.innerHTML = content;
-      const hit   = document.createElement('a');    hit.className   = 'lmb-hit';
-      if (href)   hit.href   = href;
-      if (target) hit.target = target;
-      if (rel)    hit.rel    = rel;
+    /* interaction state */
+    let pressed = false;
+    const EASE = '250ms cubic-bezier(.1,.4,.2,1)';
 
-      wrap.append(cv, inner, label, hit);
-      orig.replaceWith(wrap);
-
-      /* init after layout — double rAF guarantees first paint is done */
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        const shader = new MetalShader(cv);
-        let pressed = false;
-
-        wrap.addEventListener('mouseenter', () => {
-          shader.setSpeed(2.8);
-          wrap.style.boxShadow = '0 0 0 1px rgba(210,210,210,.22), 0 10px 32px rgba(0,0,0,.45)';
-        });
-        wrap.addEventListener('mouseleave', () => {
-          shader.setSpeed(1.5); pressed = false;
-          wrap.style.boxShadow = '';
-          wrap.style.transform = '';
-          inner.style.boxShadow = 'none';
-        });
-        hit.addEventListener('mousedown', () => {
-          pressed = true;
-          wrap.style.transform = 'scale(.97)';
-          inner.style.boxShadow = 'inset 0 2px 5px rgba(0,0,0,.6)';
-        });
-        hit.addEventListener('mouseup', () => {
-          pressed = false; wrap.style.transform = ''; inner.style.boxShadow = 'none';
-        });
-        hit.addEventListener('click', e => {
-          shader.setSpeed(2.4);
-          setTimeout(() => shader.setSpeed(pressed ? 2 : 1), 320);
-          const rect = hit.getBoundingClientRect();
-          const rip = document.createElement('span');
-          rip.style.cssText = `position:absolute;left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35) 0%,transparent 70%);pointer-events:none;animation:lmb-ripple .6s ease-out forwards;`;
-          hit.appendChild(rip); setTimeout(() => rip.remove(), 620);
-        });
-
-        /* keep canvas sized to wrapper */
-        new ResizeObserver(() => shader.resize()).observe(wrap);
-      }));
+    wrap.addEventListener('mouseenter', () => {
+      if (pressed) return;
+      wrap.style.boxShadow  = '0 4px 12px rgba(0,0,0,.32)';
+      inner.style.filter    = 'brightness(1.06)';
+      face.style.filter     = 'brightness(1.03)';
+      hover.style.opacity   = '1';
     });
-  })();
+    wrap.addEventListener('mouseleave', () => {
+      pressed = false;
+      wrap.style.transform  = '';
+      wrap.style.boxShadow  = '';
+      inner.style.filter    = '';
+      face.style.filter     = '';
+      face.style.transform  = '';
+      shine.style.opacity   = '0';
+      hover.style.opacity   = '0';
+    });
+    face.addEventListener('mousedown', () => {
+      pressed = true;
+      wrap.style.transform  = 'translateY(2px) scale(.99)';
+      wrap.style.boxShadow  = '0 1px 3px rgba(0,0,0,.2)';
+      face.style.transform  = 'scale(.97)';
+      shine.style.opacity   = '0.22';
+      hover.style.opacity   = '0';
+    });
+    face.addEventListener('mouseup', () => {
+      pressed = false;
+      wrap.style.transform  = '';
+      wrap.style.boxShadow  = '0 4px 12px rgba(0,0,0,.32)';
+      face.style.transform  = '';
+      shine.style.opacity   = '0';
+      hover.style.opacity   = '1';
+    });
+    /* ripple on click */
+    face.addEventListener('click', e => {
+      const rect = face.getBoundingClientRect();
+      const rip  = document.createElement('span');
+      rip.style.cssText = `position:absolute;left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.4) 0%,transparent 70%);pointer-events:none;animation:mbtn-ripple .55s ease-out forwards;transform-origin:center;`;
+      face.appendChild(rip);
+      setTimeout(() => rip.remove(), 580);
+    });
+  });
 
   /* ── Scroll reveal ── */
   const io = new IntersectionObserver((entries) => {
