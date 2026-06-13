@@ -336,8 +336,9 @@
     }
     /* inner image container keeps its own border-radius + clip */
     .about__photo > img {
-      border-radius: 15px;
+      width: 100%; height: auto;
       display: block;
+      border-radius: 15px;
     }
 
     /* Text column */
@@ -608,7 +609,6 @@
       }
       .about__text-col { grid-column: 1; }
       .about__stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2.5rem; padding-top: 2.5rem; }
-      .about__photo { aspect-ratio: 4/3; }
 
       .sv-item { grid-template-columns: 2rem 1fr; gap: 1rem; padding: 1.5rem 0; }
       .sv-icon { display: none; }
@@ -709,7 +709,7 @@
 
       <!-- Col 2: Photo -->
       <div class="about__photo reveal" data-d="1">
-        <img src="photo.jpg" alt="Arian Ansari" loading="lazy" style="width:100%;height:100%;object-fit:contain;object-position:center center;display:block;background:#000;border-radius:15px;">
+        <img src="photo.jpg" alt="Arian Ansari" loading="lazy">
       </div>
 
       <!-- Col 3: Text -->
